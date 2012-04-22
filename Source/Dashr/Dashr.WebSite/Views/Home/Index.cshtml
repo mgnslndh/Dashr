@@ -9,13 +9,31 @@
         this.timestamp = theTimestamp
     };
 
+    var chartOptions = {
+        series: { shadowSize: 0 }, // drawing is faster without shadows
+        yaxis: { min: 0, max: 100 },
+        xaxis: { mode: "time" }
+    };
+
+
     var ViewModel = function () {
         this.powerValue = ko.observable();
         this.powerValueList = ko.observableArray();
+        this.powerValueSeries = [];
+        this.averagePowerValueSeries = [];
+        this.count = 0;
         this.addPowerValue = function (powerValueToAdd) {
             this.powerValue(powerValueToAdd);
-            this.powerValueList.push(new TrendItem(powerValueToAdd, new Date()));
+            var item = new TrendItem(powerValueToAdd, new Date());
+            this.powerValueList.push(item);
+            this.count = this.count + 1;
+            this.powerValueSeries.push([item.timestamp.getTime(), item.value]);
+            this.averagePowerValueSeries.push([item.timestamp.getTime(), this.averagePowerValue()]);
+            this.plot.setData([this.powerValueSeries, this.averagePowerValueSeries]);
+            this.plot.setupGrid();
+            this.plot.draw();
         };
+
         this.averagePowerValue = ko.computed(function () {
             var sum = 0;
             for (var i = 0; i < this.powerValueList().length; i++) {
@@ -30,7 +48,10 @@
     function updatePage() {
         var value = Math.floor((Math.random()*100)+1);
         pageViewModel.addPowerValue(value);
+
     }
+
+
 
     ko.bindingHandlers.dateString = {
         update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
@@ -43,8 +64,9 @@
     }
 
     $(function () {
+        pageViewModel.plot = $.plot($("#chart"), [[1, 2], [2, 10]], chartOptions);
         setInterval(updatePage, 1200);
-
+        
 
         ko.applyBindings(pageViewModel);
     });
@@ -71,6 +93,8 @@
         </td>
     </tr>
 </table>
+
+<div id="chart" style="width: 90%; height: 250px"></div>
 
 <table>
     <thead>
