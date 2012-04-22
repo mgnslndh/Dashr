@@ -10,12 +10,19 @@
     };
 
     var ViewModel = function () {
-        this.powerValue = ko.observable(),
-        this.powerValueList = ko.observableArray(),
+        this.powerValue = ko.observable();
+        this.powerValueList = ko.observableArray();
         this.addPowerValue = function (powerValueToAdd) {
             this.powerValue(powerValueToAdd);
             this.powerValueList.push(new TrendItem(powerValueToAdd, new Date()));
         };
+        this.averagePowerValue = ko.computed(function () {
+            var sum = 0;
+            for (var i = 0; i < this.powerValueList().length; i++) {
+                sum = sum + this.powerValueList()[i].value;
+            }
+            return (sum / this.powerValueList().length).toFixed(1);
+        }, this);
     };
 
     var pageViewModel = new ViewModel();
@@ -58,7 +65,7 @@
         </td>
         <td>
             <a class='multi-line-button' href='#' style='width:5em'>
-                <span class='title'>300</span>
+                <span class='title' data-bind="text: averagePowerValue">300</span>
                 <span class='subtitle'>Average kWh</span>
             </a>
         </td>
