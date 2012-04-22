@@ -2,6 +2,40 @@
     ViewBag.Title = "Index";
 }
 
+<script type="text/javascript">
+
+    var TrendItem = function(theValue, theTimestamp) {
+        this.value = theValue,
+        this.timestamp = theTimestamp
+    };
+
+    var ViewModel = function () {
+        this.powerValue = ko.observable(),
+        this.powerValueList = ko.observableArray(),
+        this.addPowerValue = function (powerValueToAdd) {
+            this.powerValue(powerValueToAdd);
+            this.powerValueList.push(new TrendItem(powerValueToAdd, new Date()));
+        };
+    };
+
+    var pageViewModel = new ViewModel();
+
+    function updatePage() {
+        var value = Math.floor((Math.random()*100)+1);
+        pageViewModel.addPowerValue(value);
+    }
+
+    
+
+    $(function () {
+        setInterval(updatePage, 1200);
+
+
+        ko.applyBindings(pageViewModel);
+    });
+
+</script>
+
 <h2>Dashr</h2>
 <p>
     This dashboard sample shows information about power readings.
@@ -10,7 +44,7 @@
     <tr>
         <td>
             <a class='multi-line-button' href='#' style='width:5em'>
-                <span class='title'>300</span>
+                <span class='title' data-bind="text: powerValue">300</span>
                 <span class='subtitle'>Actual kWh</span>
             </a>
         </td>
