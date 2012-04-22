@@ -25,7 +25,15 @@
         pageViewModel.addPowerValue(value);
     }
 
-    
+    ko.bindingHandlers.dateString = {
+        update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+            var value = valueAccessor(),
+            allBindings = allBindingsAccessor();
+            var valueUnwrapped = ko.utils.unwrapObservable(value);
+            var pattern = allBindings.datePattern || 'yyyy-MM-dd hh:mm:ss';
+            $(element).text(valueUnwrapped.toString(pattern));
+        }
+    }
 
     $(function () {
         setInterval(updatePage, 1200);
@@ -55,4 +63,19 @@
             </a>
         </td>
     </tr>
+</table>
+
+<table>
+    <thead>
+        <tr>
+            <th>Power Value</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: powerValueList">
+        <tr>
+            <td data-bind="text: value"></td>
+            <td data-bind="dateString: timestamp"></td>
+        </tr>
+    </tbody>
 </table>     
