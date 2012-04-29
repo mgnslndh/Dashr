@@ -32,7 +32,7 @@
             this.plot.setData([this.powerValueSeries, this.averagePowerValueSeries]);
             this.plot.setupGrid();
             this.plot.draw();
-        };
+        };     
 
         this.averagePowerValue = ko.computed(function () {
             var sum = 0;
@@ -44,6 +44,8 @@
     };
 
     var pageViewModel = new ViewModel();
+    
+
     var lastGeneratedValue = 50;
     function updatePage() {
         
@@ -70,77 +72,60 @@
     }
 
     $(function () {
+
         pageViewModel.plot = $.plot($("#chart"), [[1, 2], [2, 10]], chartOptions);
+        updatePage();
         setInterval(updatePage, 750);
-        
+
 
         ko.applyBindings(pageViewModel);
     });
 
 </script>
 
-      <!-- Main hero unit for a primary marketing message or call to action -->
-      <div class="hero-unit">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-      </div>
-
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="span4">
-          <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
-        <div class="span4">
-          <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-       </div>
-        <div class="span4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
-      </div>
-
-      <hr>
-
-<h2>Dashr</h2>
 <p>
     This dashboard sample shows information about power readings.
 </p>
 <table>
     <tr>
         <td>
-            <a class='multi-line-button' href='#' style='width:5em'>
+            <a class='multi-line-button' href='#' style='width:5em; height: 4.5em;'>
                 <span class='title' data-bind="text: powerValue">300</span>
                 <span class='subtitle'>Actual (kW)</span>
             </a>
         </td>
         <td>
-            <a class='multi-line-button' href='#' style='width:5em'>
+            <a class='multi-line-button' href='#' style='width:5em; height: 4.5em;'>
                 <span class='title' data-bind="text: averagePowerValue">300</span>
                 <span class='subtitle'>Average (kW)</span>
             </a>
         </td>
     </tr>
 </table>
+      
+<!-- Example row of columns -->
+<div class="row">
+    <div class="span8">
+        <div id="chart" style="height: 250px"></div>    
+    </div>
+    <div class="span4">
+        <div style="height: 250px; overflow:auto">
+            <table style="width: 100%">
+                <thead>
+                    <tr>
+                        <th style="text-align:left">Power Value</th>
+                        <th style="text-align:left">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: powerValueList">
+                    <tr>
+                        <td data-bind="text: value"></td>
+                        <td data-bind="dateString: timestamp"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>        
+    </div>
+</div>
 
-<div id="chart" style="width: 90%; height: 250px"></div>
-
-<table>
-    <thead>
-        <tr>
-            <th>Power Value</th>
-            <th>Timestamp</th>
-        </tr>
-    </thead>
-    <tbody data-bind="foreach: powerValueList">
-        <tr>
-            <td data-bind="text: value"></td>
-            <td data-bind="dateString: timestamp"></td>
-        </tr>
-    </tbody>
-</table>     
+     
