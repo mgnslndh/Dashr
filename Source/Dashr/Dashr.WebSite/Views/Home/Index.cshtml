@@ -44,11 +44,17 @@
     };
 
     var pageViewModel = new ViewModel();
-
+    var lastGeneratedValue = 50;
     function updatePage() {
-        var value = Math.floor((Math.random()*100)+1);
-        pageViewModel.addPowerValue(value);
+        
+        var value = lastGeneratedValue + Math.floor(Math.random() * 20 - 10);
+        if (value < 0)
+            value = 0;
+        if (value > 100)
+            value = 100;
 
+        pageViewModel.addPowerValue(value);
+        lastGeneratedValue = value;
     }
 
 
@@ -65,7 +71,7 @@
 
     $(function () {
         pageViewModel.plot = $.plot($("#chart"), [[1, 2], [2, 10]], chartOptions);
-        setInterval(updatePage, 1200);
+        setInterval(updatePage, 750);
         
 
         ko.applyBindings(pageViewModel);
